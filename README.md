@@ -1,2 +1,2 @@
 # Bullet-Hell
-Platformer on pygame
+Hard platformer on pygame
