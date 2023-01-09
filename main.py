@@ -71,7 +71,60 @@ class Tile:
         self.sprite = pygame.sprite.Sprite()
         self.sprite.image = self.image
         self.sprite.rect = self.sprite.image.get_rect()
-        board.tiles.add(self.sprite)
+        board.tiles.add(self.sprite)import pygame
+import os
+import sys
+import time
+
+
+"""Инициализация величин"""
+gravity_acceleration = 10 # Ускорение свободного падения
+
+cell_size = 60
+
+
+class Player:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def render(self, screen):
+        pygame.draw.circle(screen, pygame.Color("red"), (self.x, self.y), 30)
+
+    def move(self, direction):
+        velocity = 0
+        if direction == "right":
+            velocity = 10
+        if direction == "left":
+            velocity = -10
+        while direction:
+            self.x += velocity
+            print(self.x)
+
+    def fall(self):
+        gravity_acceleration = 10
+
+
+
+"""Доска"""
+class Board:
+    # Инициализация
+    def __init__(self, size, width, height): # Принимает размер клетки, ширину и высоту доски в клетках
+        self.tiles = pygame.sprite.Group()
+        self.size = size
+        self.width = width
+        self.height = height
+        self.top = 150
+        self.left = 210
+        self.map = [[[[0]] * 25] * 13]
+        for i in self.map:
+            for j in i:
+                print(j)
+
+
+    def build(self, pattern):
+        self.map = pattern
+        for i in self.map:
         self.sprite.rect.x = global_x * cell_size + 210
         self.sprite.rect.y = global_y * cell_size + 150
 
