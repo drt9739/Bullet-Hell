@@ -13,13 +13,13 @@ class Layout:
         self.map = [[[[0]] * 25] * 13]
         for i in self.map:
             for j in i:
-                print(j)
+                pass
 
     def build(self, pattern):
         self.map = pattern
         for i in self.map:
             for j in i:
-                print(j)
+                pass
 
     # Отрисовка доски (сетка времена)
     def render(self, screen):  # Принимает экран для отрисовки

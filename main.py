@@ -50,9 +50,9 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_d:
+                if event.key == pygame.K_RIGHT:
                     player.move("right")
-                if event.key == pygame.K_a:
+                if event.key == pygame.K_LEFT:
                     player.move("left")
         pygame.time.Clock()
         screen.fill(pygame.Color("white"))

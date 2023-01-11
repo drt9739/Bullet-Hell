@@ -1,8 +1,7 @@
 import pygame
 
 from Scripts.open_image import open_image
-
-cell_size = 60
+from config import cell_size
 
 
 # Клетки (объекты)
@@ -10,8 +9,7 @@ class Block:
     # Инициализация
     def __init__(self, board, type_block, collision_level, sprite, global_x,
                  global_y):  # Принимает тип клетки, уровень коллизии*, спрайт (открытый файл)
-        global cell_size
-        self.type = type
+        self.type = type_block
         self.collision_level = collision_level
         self.image = open_image(sprite, 60, 60)
         self.sprite = pygame.sprite.Sprite()
