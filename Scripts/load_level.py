@@ -1,7 +1,6 @@
 import os
 
 from Scripts.Class.block import Block
-from config import level_path
 
 
 def load_level(file: str, board: object) -> list:

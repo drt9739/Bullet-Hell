@@ -2,8 +2,8 @@ import pygame
 import os
 import sys
 import time
-
 import config
+
 from Scripts.Class.player import Player
 from Scripts.Class.layout import Layout
 from Scripts.Class.block import Block
@@ -22,7 +22,9 @@ class Menu:
 
     def __init__(self, surface: object):
         self.surface = surface
-
+        self.text = ['Привет!',
+                     'Нажми чтобы начать!']
+        self.text_coord = 200
         self.run()
 
     def run(self):
@@ -31,15 +33,13 @@ class Menu:
             screen.blit(font_img, (0, 0))
 
         font = pygame.font.Font(None, 30)
-        text_coord = 50
-        intro_text = ['говно', 'запупа']
-        for line in intro_text:
+        for line in self.text:
             string_rendered = font.render(line, 1, pygame.Color('white'))
             intro_rect = string_rendered.get_rect()
-            text_coord += 10
-            intro_rect.top = text_coord
+            self.text_coord += 10
+            intro_rect.top = self.text_coord
             intro_rect.x = 10
-            text_coord += intro_rect.height
+            self.text_coord += intro_rect.height
             screen.blit(string_rendered, intro_rect)
 
         while True:
@@ -66,21 +66,32 @@ def main():
     pygame.display.set_caption("It's time for bullet hell")
     size = width, height
 
-    player = Player(500, 500)
+    players = pygame.sprite.Group()
+    Player(players)
+
     running = True
     while running:
+        clock.tick(TPS)
+        players.update()
+
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RIGHT:
+                '''if event.key == pygame.K_RIGHT:
                     player.move("right")
                 if event.key == pygame.K_LEFT:
-                    player.move("left")
-        pygame.time.Clock()
+                    player.move("left")'''
+
+
+
+
         screen.fill(pygame.Color("white"))
+
         board.render(screen)
-        player.render(screen)
+        players.draw(screen)
+
         pygame.display.flip()
     pygame.quit()
 
