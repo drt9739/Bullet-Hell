@@ -11,9 +11,16 @@ class Layout:
         self.top = 150
         self.left = 210
         self.map = [[[[0]] * 25] * 13]
+        for i in self.map:
+            for j in i:
+                pass
 
     def build(self, pattern):
         self.map = pattern
+        for i in self.map:
+            for j in i:
+                pass
+
     # Отрисовка доски (сетка времена)
     def render(self, screen):  # Принимает экран для отрисовки
         self.tiles.draw(screen)
