@@ -1,114 +1,96 @@
-import pygame
 import os
 import sys
-import time
-import config
+import pygame
 
-from Scripts.Class.player import Player
-from Scripts.Class.layout import Layout
-from Scripts.Class.block import Block
+from pygame.locals import *
+from config import *
 from Scripts.open_image import open_image
-from config import cell_size, TPS, width, height
 from Scripts.load_level import load_level
+from Scripts.Class.layout import Layout
+from Scripts.Class.player import Player
 
-
-def terminate():
-    pygame.quit()
-    sys.exit()
+pygame.init()
+screen = pygame.display.set_mode(resolution)
+clock = pygame.time.Clock()
 
 
 class Menu:
-    font_image = ''
+    font_image = 'font.png'
 
-    def __init__(self, surface: object):
-        self.surface = surface
-        self.text = ['Привет!',
-                     'Нажми чтобы начать!']
-        self.text_coord = 200
+    def __init__(self, scr):
+        self.resolution = resolution
+        self.screen = scr
+        self.font = pygame.font.Font(None, 100)
+
+        self.texts = ['*Bullet-Hell',
+                      'пока что нажми на что-нибудь чтобы начать:)']
+        self.font_pos = [resolution[0] // 2, 100]
+        self.font_size = 100
+        self.text_coord = 10
+
         self.run()
 
     def run(self):
-        if self.font_image:
-            font_img = open_image(self.font_image, width, height)
-            screen.blit(font_img, (0, 0))
+        background = open_image(self.font_image, *resolution)
+        self.screen.blit(background, (0, 0))
 
-        font = pygame.font.Font(None, 30)
-        for line in self.text:
-            string_rendered = font.render(line, 1, pygame.Color('white'))
+        for line in self.texts:
+            if '*' not in line:
+                self.font = pygame.font.Font(None, 50)
+
+            string_rendered = self.font.render(line.removeprefix('*'), True, pygame.Color('black'))
             intro_rect = string_rendered.get_rect()
-            self.text_coord += 10
-            intro_rect.top = self.text_coord
-            intro_rect.x = 10
-            self.text_coord += intro_rect.height
+            intro_rect.x, intro_rect.y = self.font_pos[0] - intro_rect.width // 2, self.font_pos[1]
+            self.font_pos[1] = self.font_pos[1] + 110
             screen.blit(string_rendered, intro_rect)
 
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    terminate()
+                    pygame.quit()
+                    sys.exit()
+
                 elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                    return
+                    return Game(self.screen)
+
             pygame.display.flip()
-            clock.tick(config.TPS)
+            clock.tick(TPS)
 
 
 class Game:
-    pass
+    def __init__(self, scr):
+        self.screen = scr
+        self.wight, self.height = 20, 10
+        self.cell_size = resolution[0] // self.wight, resolution[1] // self.height
+        self.layout = Layout(self.cell_size, self.wight, self.height)
+        self.pattern = load_level('level.data', self.layout)
+        self.layout.build(self.pattern)
+
+        self.players = pygame.sprite.Group()
+        self.player = Player(group=self.players)
+        self.screen.fill('blue')
+
+        self.is_running = True
+
+        self.run()
+
+    def run(self):
+        while self.is_running:
+            clock.tick(TPS)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.is_running = False
+            self.players.update()
+            self.screen.fill('blue')
+            self.layout.render(screen)
+            self.players.draw(screen)
+
+            pygame.display.flip()
 
 
 def main():
-    # инициализация проекта
     Menu(screen)
-
-    board = Layout(cell_size, 25, 12)
-    pattern = load_level('level.data', board)
-    board.build(pattern)
-    pygame.display.set_caption("It's time for bullet hell")
-    size = width, height
-
-    players = pygame.sprite.Group()
-    Player(players)
-
-    running = True
-    while running:
-        clock.tick(TPS)
-        players.update()
-
-        for event in pygame.event.get():
-
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                '''if event.key == pygame.K_RIGHT:
-                    player.move("right")
-                if event.key == pygame.K_LEFT:
-                    player.move("left")'''
-
-
-
-
-        screen.fill(pygame.Color("white"))
-
-        board.render(screen)
-        players.draw(screen)
-
-        pygame.display.flip()
-    pygame.quit()
 
 
 if __name__ == '__main__':
-    pygame.init()
-    screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-    clock = pygame.time.Clock()
-
-    if config.level_path == '':
-        config.level_path = os.path.abspath('data')
     main()
-
-# Примечания:
-#   • Уровень коллизии - целое число, необходимое для определения возможности проникновения определённого предмета
-#     через клетку (чем выше, тем сложнее)
-#   • Уровень проникновение - целое число, определяющее способность предмета проходить через клетку
-#   • Глобальная позиция - позиция относительно доски
-#   • Локальная позиция - позиция относительно клетки
-#

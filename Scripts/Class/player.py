@@ -8,8 +8,8 @@ from Scripts.open_image import open_image
 class Player(pygame.sprite.Sprite):
     player_image = open_image('player.png', 60, 60)
 
-    def __init__(self, *group, x=500, y=500):
-        super().__init__(*group)
+    def __init__(self, group, x=500, y=500):
+        super().__init__(group)
         self.image = Player.player_image
         self.rect = self.image.get_rect()
         self.rect.x = self.rect.y = 0
