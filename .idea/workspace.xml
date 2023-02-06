@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f220fa7a-2573-421f-8b32-efe35128d23c" name="Changes" comment="Коммит №2 Версия 0.0.1&#10;Пытаюсь что-то сделать (сделаны блоки)">
-      <change afterPath="$PROJECT_DIR$/Data/Levels/Test/test_room" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Scripts/level_loadig.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/sprites/ground.png" beforeDir="false" afterPath="$PROJECT_DIR$/Data/Sprites/ground.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/Class/block.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Classes/block.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/Class/layout.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Classes/layout.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/Class/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Classes/player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/open_image.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/open_image.py" afterDir="false" />
+    <list default="true" id="f220fa7a-2573-421f-8b32-efe35128d23c" name="Changes" comment="Завершение алгоритма загрузки уровня">
+      <change afterPath="$PROJECT_DIR$/Data/Levels/Test/level.data" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data/Sprites/playerspawn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Scripts/Class/bullet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/BulletHell.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/BulletHell.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/Levels/Test/test_room" beforeDir="false" afterPath="$PROJECT_DIR$/Data/Levels/Test/test_room" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/level.data" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Classes/block.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Class/block.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Classes/layout.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Class/layout.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Classes/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Class/player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/level_loadig.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/level_loadig.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/load_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/load_level.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -33,6 +39,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -47,12 +54,20 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Projetcs/BulletHell&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Projetcs/BulletHell/Data/Sprites&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Projetcs\BulletHell\Data\Sprites" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Projetcs\BulletHell\Data\Levels\Test" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.main">
-    <configuration name="1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="block" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="BulletHell" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -60,11 +75,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../Разное/pythonProject" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Scripts/Class" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../Разное/pythonProject/1.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Scripts/Class/block.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -73,19 +88,40 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="level_loadig" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="layout" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="BulletHell" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="D:\Разное\yandex\venv\Scripts\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Scripts" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Scripts/Class" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Scripts/level_loadig.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Scripts/Class/layout.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="load_level" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="BulletHell" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Scripts/load_level.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -115,7 +151,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="randomBlock" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="player" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="BulletHell" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -123,11 +159,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$/OneDrive/Рабочий стол/Макросы" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Scripts/Class" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/OneDrive/Рабочий стол/Макросы/randomBlock.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Scripts/Class/player.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -139,10 +175,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.level_loadig" />
-        <item itemvalue="Python.randomBlock" />
-        <item itemvalue="Python.1" />
-        <item itemvalue="Python.main" />
+        <item itemvalue="Python.player" />
+        <item itemvalue="Python.block" />
+        <item itemvalue="Python.layout" />
+        <item itemvalue="Python.load_level" />
       </list>
     </recent_temporary>
   </component>
@@ -239,7 +275,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673258569503</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Завершение алгоритма загрузки уровня">
+      <created>1673514946116</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1673514946116</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -274,6 +317,7 @@
     <MESSAGE value="Коммит №1&#10;Подготовил классы для доски и клеток (блоков). Ожидаю изучения спрайтов" />
     <MESSAGE value="Коммит №1 Версия 0.0.1" />
     <MESSAGE value="Коммит №2 Версия 0.0.1&#10;Пытаюсь что-то сделать (сделаны блоки)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Коммит №2 Версия 0.0.1&#10;Пытаюсь что-то сделать (сделаны блоки)" />
+    <MESSAGE value="Завершение алгоритма загрузки уровня" />
+    <option name="LAST_COMMIT_MESSAGE" value="Завершение алгоритма загрузки уровня" />
   </component>
 </project>

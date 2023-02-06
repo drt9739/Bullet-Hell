@@ -13,6 +13,10 @@ from Scripts.load_level import load_level
 
 
 def terminate():
+    """
+    Закрытие программы
+    :return:
+    """
     pygame.quit()
     sys.exit()
 
@@ -57,11 +61,13 @@ class Game:
 
 
 def main():
-    # инициализация проекта
+    """
+    Инициализация и цикл программы
+    """
     Menu(screen)
 
     board = Layout(cell_size, 25, 12)
-    pattern = load_level('level.data', board)
+    pattern = load_level('test\\', 'level.data', board)
     board.build(pattern)
     pygame.display.set_caption("It's time for bullet hell")
     size = width, height
@@ -98,17 +104,14 @@ def main():
 
 if __name__ == '__main__':
     pygame.init()
-    screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+    screen = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
     clock = pygame.time.Clock()
 
     if config.level_path == '':
-        config.level_path = os.path.abspath('data')
+        config.level_path = os.path.abspath('data/levels/test')
     main()
 
 # Примечания:
 #   • Уровень коллизии - целое число, необходимое для определения возможности проникновения определённого предмета
 #     через клетку (чем выше, тем сложнее)
 #   • Уровень проникновение - целое число, определяющее способность предмета проходить через клетку
-#   • Глобальная позиция - позиция относительно доски
-#   • Локальная позиция - позиция относительно клетки
-#

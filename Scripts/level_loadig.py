@@ -1,4 +1,4 @@
-from Scripts.Classes.block import Block
+from Scripts.Class.block import Block
 
 
 transform_dictionary = {0: ("air", 0, "air.png"), 1: ("ground", 20, "ground.png")}

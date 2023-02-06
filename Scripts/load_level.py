@@ -3,8 +3,15 @@ import os
 from Scripts.Class.block import Block
 
 
-def load_level(file: str, board: object) -> list:
-    path = os.path.abspath('data\\' + file)
+def load_level(directory: str, file: str, board: object) -> list:
+    """
+
+    :param directory: Папка с комнатами
+    :param file: Комната
+    :param board: Доска игры
+    :return:
+    """
+    path = os.path.abspath('data\\levels\\' + directory + file)
     result, res = [], []
 
     with open(path) as file:

@@ -1,5 +1,5 @@
-cell_size = 60
-gravity_acceleration = 10
+cell_size = 60 # Размер клетки
+gravity_acceleration = 10 # Ускорение свободного падения (кто сказал, что мы на Земле и оно ~= 9,81?)
 TPS = 90  # Обновления (tick) в секунду
-width, height = 1920, 1080
-level_path = ''
+width, height = 1920, 1080 # Ширина и высота экрана
+level_path = '' # Путь к уровню
