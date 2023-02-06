@@ -16,5 +16,6 @@ class Block:
         self.sprite.image = self.image
         self.sprite.rect = self.sprite.image.get_rect()
         board.tiles.add(self.sprite)
+        self.rect = self.sprite.rect
         self.sprite.rect.x = global_x * cell_size + 210
         self.sprite.rect.y = global_y * cell_size + 150

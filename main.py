@@ -63,7 +63,7 @@ class Game:
         self.wight, self.height = 20, 10
         self.cell_size = resolution[0] // self.wight, resolution[1] // self.height
         self.layout = Layout(self.cell_size, self.wight, self.height)
-        self.pattern = load_level('level.data', self.layout)
+        self.pattern, self.blocks = load_level('level.data', self.layout)
         self.layout.build(self.pattern)
 
         self.players = pygame.sprite.Group()
@@ -80,12 +80,15 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.is_running = False
-            self.players.update()
+            self.player.update(self.blocks)
             self.screen.fill('blue')
             self.layout.render(screen)
             self.players.draw(screen)
 
             pygame.display.flip()
+            for block in self.blocks:
+                if self.player.rect.colliderect(block.rect):
+                    self.player.stop()
 
 
 def main():

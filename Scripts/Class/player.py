@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = self.rect.y = 0
         self.time = datetime.datetime.now()
 
-    def update(self):
+    def update(self, blocks):
         if pygame.key.get_pressed()[K_LEFT]:
             self.rect.x -= 4
         elif pygame.key.get_pressed()[K_RIGHT]:
@@ -25,6 +25,9 @@ class Player(pygame.sprite.Sprite):
         elif pygame.key.get_pressed()[K_DOWN]:
             self.rect.y += 4
         self.rect.y += 1
+
+    def stop(self):
+        self.rect.y -= 1
 
     def kill(self):
         pass
