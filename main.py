@@ -17,10 +17,10 @@ clock = pygame.time.Clock()
 class Menu:
     font_image = 'font.png'
 
-    def __init__(self, scr):
-        self.resolution = resolution
-        self.screen = scr
-        self.font = pygame.font.Font(None, 100)
+    def __init__(self, scr: pygame.Surface):
+        self.resolution: tuple = resolution
+        self.screen: pygame.Surface = scr
+        self.font: pygame.font.Font = pygame.font.Font(None, 100)
 
         self.texts = ['*Bullet-Hell',
                       'пока что нажми на что-нибудь чтобы начать:)']
@@ -58,13 +58,13 @@ class Menu:
 
 
 class Game:
-    def __init__(self, scr):
+    def __init__(self, scr: pygame.Surface):
         self.screen = scr
         self.wight, self.height = 20, 10
         self.cell_size = resolution[0] // self.wight, resolution[1] // self.height
         self.layout = Layout(self.cell_size, self.wight, self.height)
         self.pattern, self.blocks = load_level('level.data', self.layout)
-        self.layout.build(self.pattern)
+        # self.layout.build(self.pattern)
 
         self.players = pygame.sprite.Group()
         self.player = Player(group=self.players)
@@ -76,19 +76,19 @@ class Game:
 
     def run(self):
         while self.is_running:
-            clock.tick(TPS)
+            time = clock.tick(TPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.is_running = False
-            self.player.update(self.blocks)
+            self.player.update(time, self.blocks)
             self.screen.fill('blue')
             self.layout.render(screen)
             self.players.draw(screen)
 
             pygame.display.flip()
-            for block in self.blocks:
-                if self.player.rect.colliderect(block.rect):
-                    self.player.stop()
+            # for block in self.blocks:
+            #     if self.player.rect.colliderect(block.rect):
+            #         self.player.stop()
 
 
 def main():
