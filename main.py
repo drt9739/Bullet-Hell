@@ -6,7 +6,7 @@ from pygame.locals import *
 from config import *
 from Scripts.open_image import open_image
 from Scripts.load_level import load_level
-from Scripts.Class.layout import Layout
+from Scripts.Class.layout import Level
 from Scripts.Class.player import Player
 
 pygame.init()
@@ -60,11 +60,10 @@ class Menu:
 class Game:
     def __init__(self, scr: pygame.Surface):
         self.screen = scr
-        self.wight, self.height = 20, 10
-        self.cell_size = resolution[0] // self.wight, resolution[1] // self.height
-        self.layout = Layout(self.cell_size, self.wight, self.height)
-        self.pattern, self.blocks = load_level('level.data', self.layout)
-        # self.layout.build(self.pattern)
+        self.wight, self.height = 30, 13
+        self.block_size = 60, 60
+        self.level = Level(resolution, self.block_size)
+        self.blocks = self.level.get_block()
 
         self.players = pygame.sprite.Group()
         self.player = Player(group=self.players)
@@ -82,8 +81,12 @@ class Game:
                     self.is_running = False
             self.player.update(time, self.blocks)
             self.screen.fill('blue')
-            self.layout.render(screen)
+            self.level.render(screen)
             self.players.draw(screen)
+
+            if self.player.rect.x > resolution[0] // 2:
+                self.level.next_level(screen)
+                self.player.start_pos()
 
             pygame.display.flip()
             # for block in self.blocks:
