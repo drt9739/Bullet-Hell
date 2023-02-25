@@ -1,10 +1,20 @@
 import pygame
 import datetime
+import math
+from time import time_ns
 
 from pygame.locals import *
 from Scripts.open_image import open_image
-from config import SPEED, gravity_acceleration, resolution
+from config import SPEED, gravity_acceleration, resolution, BULLET_SPEED
 from Scripts.Class.block import Block
+from Scripts.Class.weapon import Weapon
+from Scripts.Class.bullet import Bullet
+
+TO_DEG = 180 / math.pi
+
+
+def get_time_ms():
+    return time_ns() // 1_000_000
 
 
 class Player(pygame.sprite.Sprite):
@@ -23,7 +33,17 @@ class Player(pygame.sprite.Sprite):
         self.ticks_falling: int = -1
         self.ticks_jumping: int = -1
 
+        self.weapon = Weapon(60, 60)
+        group.add(self.weapon)
+        self.weapon.rect = self.rect
+        self.last_shooting_time = get_time_ms()
+
     def update(self, time: float, blocks: pygame.sprite.Group):
+        self.update_movement(time, blocks);
+        self.update_weapon()
+        self.handle_shooting()
+
+    def update_movement(self, time: float, blocks: pygame.sprite.Group):
         if pygame.key.get_pressed()[K_LEFT] or pygame.key.get_pressed()[K_a]:
             self.rect.x -= SPEED * time
 
@@ -91,3 +111,54 @@ class Player(pygame.sprite.Sprite):
 
     def check_right(self, block: Block) -> bool:
         return block.rect.x + block.rect.width > self.rect.x + self.rect.width < block.rect.x + block.rect.width * 0.4
+
+    def update_weapon(self):
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+
+        player_center_x = self.rect.x + self.rect.w / 2
+        player_center_y = self.rect.y + self.rect.h / 2
+
+        distance_x = mouse_x - player_center_x
+        distance_y = mouse_y - player_center_y
+        angle = math.atan2(distance_y, distance_x)  # in radians
+        angle = angle * TO_DEG  # to degrees
+        self.weapon.image = pygame.transform.rotate(
+            pygame.transform.scale(
+                Weapon.pistol_image
+                if abs(angle) < 90
+                else pygame.transform.flip(Weapon.pistol_image, False, True),
+                (self.rect.w, self.rect.h),
+            ),
+            -angle,
+        )
+
+    def handle_shooting(self):
+        if (
+                pygame.mouse.get_pressed()[0]
+                and get_time_ms() >= self.last_shooting_time + 200
+        ):
+            self.last_shooting_time = get_time_ms()
+
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+
+            player_center_x = self.rect.x + Bullet.BULLET_SIZE / 2
+            player_center_y = self.rect.y + Bullet.BULLET_SIZE / 2
+
+            distance_x = (
+                    mouse_x - player_center_x - Bullet.BULLET_SIZE / 2
+            )
+            distance_y = (
+                    mouse_y - player_center_y - Bullet.BULLET_SIZE / 2
+            )
+            angle = math.atan2(distance_y, distance_x)
+
+            speed_x = math.cos(angle) * BULLET_SPEED
+            speed_y = math.sin(angle) * BULLET_SPEED
+
+            Bullet(
+                self.groups()[0],
+                player_center_x,
+                player_center_y,
+                speed_x,
+                speed_y
+            )

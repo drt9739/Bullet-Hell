@@ -79,7 +79,9 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.is_running = False
-            self.player.update(time, self.blocks)
+            
+            for obj in self.players:
+                obj.update(time, self.blocks)
             self.screen.fill('blue')
             self.level.render(screen)
             self.players.draw(screen)
