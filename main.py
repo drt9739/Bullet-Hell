@@ -79,7 +79,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.is_running = False
-            
+
             for obj in self.players:
                 obj.update(time, self.blocks)
             self.screen.fill('blue')
@@ -94,6 +94,48 @@ class Game:
             # for block in self.blocks:
             #     if self.player.rect.colliderect(block.rect):
             #         self.player.stop()
+
+
+class EndScreen:
+    font_image = 'font.png'
+
+    def __init__(self, scr: pygame.Surface):
+        self.resolution: tuple = resolution
+        self.screen: pygame.Surface = scr
+        self.font: pygame.font.Font = pygame.font.Font(None, 100)
+
+        self.texts = ['Вы прошли все уровни!',
+                      'Победа!']
+        self.font_pos = [resolution[0] // 2, 100]
+        self.font_size = 100
+        self.text_coord = 10
+
+        self.is_running = True
+
+        self.run()
+
+    def run(self):
+        background = open_image(self.font_image, *resolution)
+        self.screen.blit(background, (0, 0))
+
+        for line in self.texts:
+            if '*' not in line:
+                self.font = pygame.font.Font(None, 50)
+
+            string_rendered = self.font.render(line.removeprefix('*'), True, pygame.Color('black'))
+            intro_rect = string_rendered.get_rect()
+            intro_rect.x, intro_rect.y = self.font_pos[0] - intro_rect.width // 2, self.font_pos[1]
+            self.font_pos[1] = self.font_pos[1] + 110
+            screen.blit(string_rendered, intro_rect)
+
+        while self.is_running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            pygame.display.flip()
+            clock.tick(TPS)
 
 
 def main():

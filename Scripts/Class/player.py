@@ -1,3 +1,5 @@
+import time
+
 import pygame
 import datetime
 import math
@@ -32,6 +34,8 @@ class Player(pygame.sprite.Sprite):
 
         self.ticks_falling: int = -1
         self.ticks_jumping: int = -1
+
+        self.delay = datetime.datetime.now().second - 3
 
         self.weapon = Weapon(60, 60)
         group.add(self.weapon)
@@ -155,10 +159,13 @@ class Player(pygame.sprite.Sprite):
             speed_x = math.cos(angle) * BULLET_SPEED
             speed_y = math.sin(angle) * BULLET_SPEED
 
-            Bullet(
-                self.groups()[0],
-                player_center_x,
-                player_center_y,
-                speed_x,
-                speed_y
-            )
+
+            if datetime.datetime.now().second - self.delay >= 3:
+                Bullet(
+                    self.groups()[0],
+                    player_center_x,
+                    player_center_y,
+                    speed_x,
+                    speed_y
+                )
+                self.delay = datetime.datetime.now().second
