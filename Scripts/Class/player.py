@@ -7,7 +7,7 @@ from time import time_ns
 
 from pygame.locals import *
 from Scripts.open_image import open_image
-from config import SPEED, gravity_acceleration, resolution, BULLET_SPEED
+import config
 from Scripts.Class.block import Block
 from Scripts.Class.weapon import Weapon
 from Scripts.Class.bullet import Bullet
@@ -22,8 +22,8 @@ def get_time_ms():
 class Player(pygame.sprite.Sprite):
     player_image = open_image('player.png', 60, 60)
 
-    def __init__(self, group, x=0, y=960):
-        super().__init__(group)
+    def __init__(self, x=0, y=960):
+        super().__init__(config.game_group_3)
         self.startpos = (x, y)
 
         self.image = Player.player_image
@@ -35,21 +35,33 @@ class Player(pygame.sprite.Sprite):
         self.ticks_falling: int = -1
         self.ticks_jumping: int = -1
 
-        self.delay = datetime.datetime.now().second - 3
+        self.delay = datetime.datetime.now().second - 2
 
         self.weapon = Weapon(60, 60)
-        group.add(self.weapon)
         self.weapon.rect = self.rect
         self.last_shooting_time = get_time_ms()
 
-    def update(self, time: float, blocks: pygame.sprite.Group):
-        self.update_movement(time, blocks);
+    def event_handler(self, time: float):
+        self.update_movement(time);
         self.update_weapon()
         self.handle_shooting()
+    
+    def draw(self, surface: pygame.Surface):
+        surface.blit(
+            self.image,
+            self.rect
+        )
 
-    def update_movement(self, time: float, blocks: pygame.sprite.Group):
+        surface.blit(
+            self.weapon.image,
+            self.weapon.rect
+        )
+
+    def update_movement(self, time: float):
+        blocks = config.blocks_group
+        
         if pygame.key.get_pressed()[K_LEFT] or pygame.key.get_pressed()[K_a]:
-            self.rect.x -= SPEED * time
+            self.rect.x -= config.SPEED * time
 
             colliding_sprite = pygame.sprite.spritecollide(self, blocks, False)
             blocks_left = [block for block in colliding_sprite if self.check_left(block)]
@@ -57,7 +69,7 @@ class Player(pygame.sprite.Sprite):
             if blocks_left:
                 self.rect.x = blocks_left[0].rect.x + blocks_left[0].rect.width
         if pygame.key.get_pressed()[K_RIGHT] or pygame.key.get_pressed()[K_d]:
-            self.rect.x += SPEED * time
+            self.rect.x += config.SPEED * time
 
             colliding_sprite = pygame.sprite.spritecollide(self, blocks, False)
             blocks_right = [block for block in colliding_sprite if self.check_right(block)]
@@ -66,7 +78,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.x = blocks_right[0].rect.x - blocks_right[0].rect.width
 
         self.ticks_falling += 1
-        self.rect.y += self.ticks_falling ** 1.4 * gravity_acceleration * time
+        self.rect.y += self.ticks_falling ** 1.4 * config.GRAVITY_ACCELERATION * time
 
         colliding_sprite = pygame.sprite.spritecollide(self, blocks, False)
         blocks_under = [block for block in colliding_sprite if self.check_under(block)]
@@ -81,28 +93,29 @@ class Player(pygame.sprite.Sprite):
 
         if self.ticks_jumping >= 0:
             self.ticks_jumping += 1
-            self.rect.y -= (60 - self.ticks_jumping) ** 1.4 * gravity_acceleration * time
+            self.rect.y -= (60 - self.ticks_jumping) ** 1.4 * config.GRAVITY_ACCELERATION * time
 
             colliding_sprite = pygame.sprite.spritecollide(self, blocks, False)
             blocks_above = [block for block in colliding_sprite if self.check_above(block)]
 
             if blocks_above:
-                self.ticks_jumping = -1;
+                self.ticks_jumping = -1
                 self.rect.y = blocks_above[0].rect.y + blocks_above[0].rect.height
 
             if self.ticks_jumping == 30:
                 self.ticks_jumping = -1
 
-        if self.rect.x < 0 or self.rect.x > resolution[0]:
-            self.rect.x = resolution[0] // 2
-            self.rect.y = resolution[1] // 2
+        # if self.rect.x < 0 or self.rect.x > resolution[0]:
+        #     self.rect.x = resolution[0] // 2
+        #     self.rect.y = resolution[1] // 2
 
-        if self.rect.y < 0 or self.rect.y > resolution[1]:
-            self.rect.x = resolution[0] // 2
-            self.rect.y = resolution[1] // 2
+        # if self.rect.y < 0 or self.rect.y > resolution[1]:
+        #     self.rect.x = resolution[0] // 2
+        #     self.rect.y = resolution[1] // 2
 
-    def start_pos(self):
+    def reset(self):
         self.rect.x, self.rect.y = self.startpos
+        self.delay = datetime.datetime.now().second - 2
 
     def check_under(self, block: Block) -> bool:
         return self.rect.y + 0.6 * self.rect.height < block.rect.y < self.rect.y + self.rect.height
@@ -156,13 +169,11 @@ class Player(pygame.sprite.Sprite):
             )
             angle = math.atan2(distance_y, distance_x)
 
-            speed_x = math.cos(angle) * BULLET_SPEED
-            speed_y = math.sin(angle) * BULLET_SPEED
+            speed_x = math.cos(angle) * config.BULLET_SPEED
+            speed_y = math.sin(angle) * config.BULLET_SPEED
 
-
-            if datetime.datetime.now().second - self.delay >= 3:
+            if datetime.datetime.now().second - self.delay >= 2:
                 Bullet(
-                    self.groups()[0],
                     player_center_x,
                     player_center_y,
                     speed_x,

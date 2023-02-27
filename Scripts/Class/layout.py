@@ -1,7 +1,8 @@
 import pygame
 import os
 
-from Scripts.Class.block import Block
+from Scripts.Class.block import Block, BlockUp, BlockDown
+from config import LEVEL_LIMIT
 
 
 class Level:
@@ -10,6 +11,7 @@ class Level:
         self.block_size = block_size
         self.current_level = current_level
 
+        self.start_time = pygame.time.get_ticks()
         self.layout = []
 
         self.blockGroup = pygame.sprite.Group()
@@ -17,50 +19,35 @@ class Level:
         self.load_level()
 
     def load_level(self):
-        file = os.path.abspath('data\\' + f'level{self.current_level}.data')
-        with open(file, 'r') as f:
-            data = f.readlines()
+        if self.current_level <= LEVEL_LIMIT:
+            file = os.path.abspath('data\\levels\\' + f'level{self.current_level}.data')
+            with open(file, 'r') as f:
+                data = f.readlines()
 
-        for y in range(len(data)):
-            for x in range(len(data[y])):
-                if data[y][x] == 'b':
-                    block = Block(x, y, self.block_size)
-                    self.blockGroup.add(block)
-                    self.layout.append(block)
+            for y in range(len(data)):
+                for x in range(len(data[y])):
+                    if data[y][x] == 'b':
+                        block = Block(x, y, self.block_size)
+                        self.blockGroup.add(block)
+                        self.layout.append(block)
+                    # elif data[y][x] == 'd':
+                    #     block = BlockDown(x, y, self.block_size)
+                    #
+                    #     self.layout.append(block)
+                    # elif data[y][x] == 'u':
+                    #     block = BlockUp(x, y, self.block_size)
+
+                        self.layout.append(block)
 
     def render(self, screen):
         self.blockGroup.draw(screen)
 
     def next_level(self, screen):
         self.current_level += 1
-        self.blockGroup.clear(screen, screen)
-
+        self.blockGroup = pygame.sprite.Group()
+        self.layout = []
+        self.start_time = pygame.time.get_ticks()
         self.load_level()
 
     def get_block(self):
         return self.layout
-
-
-class Layout:
-    # Инициализация
-    def __init__(self, size, width, height):  # Принимает размер клетки, ширину и высоту доски в клетках
-        self.tiles = pygame.sprite.Group()
-        self.size = size
-        self.width = width
-        self.height = height
-        self.top = 0
-        self.left = 0
-        self.map = [[[[0]] * 30] * 13]
-        for i in self.map:
-            for j in i:
-                pass
-
-    # def build(self, pattern):
-    #     self.map = pattern
-    #     for i in self.map:
-    #         for j in i:
-    #             pass
-
-    # Отрисовка доски (сетка времена)
-    def render(self, screen):  # Принимает экран для отрисовки
-        self.tiles.draw(screen)
