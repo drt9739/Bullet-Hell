@@ -5,16 +5,24 @@ from config import cell_size
 
 
 # Клетки (объекты)
-class Block:
-    # Инициализация
-    def __init__(self, board, type_block, collision_level, sprite, global_x,
-                 global_y):  # Принимает тип клетки, уровень коллизии*, спрайт (открытый файл)
-        self.type = type_block
-        self.collision_level = collision_level
-        self.image = open_image(sprite, 60, 60)
-        self.sprite = pygame.sprite.Sprite()
-        self.sprite.image = self.image
-        self.sprite.rect = self.sprite.image.get_rect()
-        board.tiles.add(self.sprite)
-        self.sprite.rect.x = global_x * cell_size + 210
-        self.sprite.rect.y = global_y * cell_size + 150
+class Block(pygame.sprite.Sprite):
+
+    def __init__(self, x, y, size, image):  # Принимает тип клетки, спрайт (открытый файл)
+        super().__init__()
+        self.block_image = image
+        self.image = open_image(self.block_image, size[0], size[1])
+        self.rect = self.image.get_rect()
+        self.rect.x = x * cell_size - size[0]
+        self.rect.y = y * cell_size - size[0]
+
+
+class BackgroundBlock(pygame.sprite.Sprite):
+    def __init__(self, x, y, size, image):  # Принимает тип клетки, спрайт (открытый файл)
+        super().__init__()
+        self.block_image = image
+        self.image = open_image(self.block_image, size[0], size[1])
+        self.rect = self.image.get_rect()
+        self.rect.x = x * cell_size - size[0]
+        self.rect.y = y * cell_size - size[0]
+
+

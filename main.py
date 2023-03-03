@@ -1,74 +1,146 @@
-import pygame
 import os
 import sys
-import time
+import pygame
 
-from Scripts.Class.player import Player
-from Scripts.Class.layout import Layout
-from Scripts.Class.block import Block
+from pygame.locals import *
+from config import *
 from Scripts.open_image import open_image
-from config import cell_size, TPS, width, height
+from Scripts.load_level import load_level
+from Scripts.Class.layout import Level
+from Scripts.Class.player import Player
+
+pygame.init()
+screen = pygame.display.set_mode(resolution)
+clock = pygame.time.Clock()
+
+
+class Menu:
+    font_image = 'font.png'
+
+    def __init__(self, scr: pygame.Surface):
+        self.resolution: tuple = resolution
+        self.screen: pygame.Surface = scr
+        self.font: pygame.font.Font = pygame.font.Font(None, 100)
+
+        self.texts = ['*Bullet-Hell',
+                      'пока что нажми на что-нибудь чтобы начать:)']
+        self.font_pos = [resolution[0] // 2, 100]
+        self.font_size = 100
+        self.text_coord = 10
+
+        self.run()
+
+    def run(self):
+        background = open_image(self.font_image, *resolution)
+        self.screen.blit(background, (0, 0))
+
+        for line in self.texts:
+            if '*' not in line:
+                self.font = pygame.font.Font(None, 50)
+
+            string_rendered = self.font.render(line.removeprefix('*'), True, pygame.Color('black'))
+            intro_rect = string_rendered.get_rect()
+            intro_rect.x, intro_rect.y = self.font_pos[0] - intro_rect.width // 2, self.font_pos[1]
+            self.font_pos[1] = self.font_pos[1] + 110
+            screen.blit(string_rendered, intro_rect)
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                    return Game(self.screen)
+
+            pygame.display.flip()
+            clock.tick(TPS)
+
+
+class Game:
+    def __init__(self, scr: pygame.Surface):
+        self.screen = scr
+        self.wight, self.height = 30, 13
+        self.block_size = 60, 60
+        self.level = Level(resolution, self.block_size)
+        self.blocks = self.level.get_block()
+
+        self.players = pygame.sprite.Group()
+        self.player = Player(group=self.players)
+        self.screen.fill('blue')
+
+        self.is_running = True
+
+        self.run()
+
+    def run(self):
+        while self.is_running:
+            time = clock.tick(TPS)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.is_running = False
+
+            for obj in self.players:
+                obj.update(time, self.blocks)
+            self.screen.fill(Color(50, 60, 57))
+            self.level.render(screen)
+            self.players.draw(screen)
+
+            # if self.player.rect.x > resolution[0] // 2:
+            #     self.level.next_level(screen)
+            #     self.player.start_pos()
+
+            pygame.display.flip()
+            # for block in self.blocks:
+            #     if self.player.rect.colliderect(block.rect):
+            #         self.player.stop()
+
+
+class EndScreen:
+    font_image = 'font.png'
+
+    def __init__(self, scr: pygame.Surface):
+        self.resolution: tuple = resolution
+        self.screen: pygame.Surface = scr
+        self.font: pygame.font.Font = pygame.font.Font(None, 100)
+
+        self.texts = ['Вы прошли все уровни!',
+                      'Победа!']
+        self.font_pos = [resolution[0] // 2, 100]
+        self.font_size = 100
+        self.text_coord = 10
+
+        self.is_running = True
+
+        self.run()
+
+    def run(self):
+        background = open_image(self.font_image, *resolution)
+        self.screen.blit(background, (0, 0))
+
+        for line in self.texts:
+            if '*' not in line:
+                self.font = pygame.font.Font(None, 50)
+
+            string_rendered = self.font.render(line.removeprefix('*'), True, pygame.Color('black'))
+            intro_rect = string_rendered.get_rect()
+            intro_rect.x, intro_rect.y = self.font_pos[0] - intro_rect.width // 2, self.font_pos[1]
+            self.font_pos[1] = self.font_pos[1] + 110
+            screen.blit(string_rendered, intro_rect)
+
+        while self.is_running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            pygame.display.flip()
+            clock.tick(TPS)
 
 
 def main():
-    # инициализация проекта
-    pygame.init()
-    board = Layout(cell_size, 25, 12)
-    pattern = [[[[0]] * 25] * 11, [[[Block(board, "ground", 20, "ground.png", 0, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 1, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 2, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 3, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 4, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 5, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 6, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 7, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 8, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 9, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 10, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 11, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 12, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 13, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 14, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 15, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 16, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 17, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 18, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 19, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 20, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 21, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 22, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 23, 12)],
-                                    [Block(board, "ground", 20, "ground.png", 24, 12)]]]]
-    board.build(pattern)
-    pygame.display.set_caption("It's time for bullet hell")
-    size = width, height
-    screen = pygame.display.set_mode(size)
-    player = Player(500, 500)
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RIGHT:
-                    player.move("right")
-                if event.key == pygame.K_LEFT:
-                    player.move("left")
-        pygame.time.Clock()
-        screen.fill(pygame.Color("white"))
-        board.render(screen)
-        player.render(screen)
-        pygame.display.flip()
-    pygame.quit()
+    Menu(screen)
 
 
 if __name__ == '__main__':
     main()
-
-# Примечания:
-#   • Уровень коллизии - целое число, необходимое для определения возможности проникновения определённого предмета
-#     через клетку (чем выше, тем сложнее)
-#   • Уровень проникновение - целое число, определяющее способность предмета проходить через клетку
-#   • Глобальная позиция - позиция относительно доски
-#   • Локальная позиция - позиция относительно клетки
-#
