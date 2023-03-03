@@ -2,6 +2,7 @@ import os
 
 from Scripts.Class.block import Block
 from Scripts.Class.layout import Layout
+from config import cell_size
 import pygame
 
 
@@ -18,7 +19,7 @@ def load_level(file: str, board: Layout) -> tuple:
                 # Пустота
                 pass
             elif level[i][j] == 'b':
-                block = Block(board, 'ground', 'ground.png', j, i)
+                block = Block(j, i, cell_size, 'block_l.png')
                 result.add(block)
                 blocks.add(block)
 

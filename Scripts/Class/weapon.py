@@ -6,11 +6,12 @@ from Scripts.open_image import open_image
 class Weapon(pygame.sprite.Sprite):
     pistol_image = open_image("pistol.png", 60, 60)
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, capacity):
         super().__init__()
 
         self.image = Weapon.pistol_image
         self.rect = self.image.get_rect()
+        self.capacity = capacity
     
     def update(*args, **kwargs):
         pass

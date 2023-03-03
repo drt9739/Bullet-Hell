@@ -1,7 +1,7 @@
 import pygame
 import os
 
-from Scripts.Class.block import Block
+from Scripts.Class.block import Block, BackgroundBlock
 
 
 class Level:
@@ -12,7 +12,8 @@ class Level:
 
         self.layout = []
 
-        self.blockGroup = pygame.sprite.Group()
+        self.block_group = pygame.sprite.Group()
+        self.back_ground_group = pygame.sprite.Group()
 
         self.load_level()
 
@@ -23,17 +24,47 @@ class Level:
 
         for y in range(len(data)):
             for x in range(len(data[y])):
+                if data[y][x] == '1':
+                    block = Block(x, y, self.block_size, "block1.png")
+                if data[y][x] == '2':
+                    block = Block(x, y, self.block_size, "block2.png")
+                if data[y][x] == '3':
+                    block = Block(x, y, self.block_size, "block3.png")
+                if data[y][x] == '4':
+                    block = Block(x, y, self.block_size, "block4.png")
+                if data[y][x] == '5':
+                    block = Block(x, y, self.block_size, "block5.png")
+                if data[y][x] == '6':
+                    block = Block(x, y, self.block_size, "block6.png")
+                if data[y][x] == '7':
+                    block = Block(x, y, self.block_size, "block7.png")
+                if data[y][x] == '8':
+                    block = Block(x, y, self.block_size, "block8.png")
+                if data[y][x] == '9':
+                    block = Block(x, y, self.block_size, "block9.png")
+                if data[y][x] == 't':
+                    bblock = BackgroundBlock(x, y, self.block_size, "torch.png")
+                    self.block_group.add(bblock)
                 if data[y][x] == 'b':
-                    block = Block(x, y, self.block_size)
-                    self.blockGroup.add(block)
+                    bblock = BackgroundBlock(x, y, self.block_size, "block6.png")
+                    self.block_group.add(bblock)
+                if data[y][x] == 'g':
+                    bblock = BackgroundBlock(x, y, self.block_size, "gold.png")
+                    self.block_group.add(bblock)
+                if data[y][x] == 'm':
+                    bblock = BackgroundBlock(x, y, self.block_size, "target.png")
+                    self.block_group.add(bblock)
+
+                if block:
+                    self.block_group.add(block)
                     self.layout.append(block)
 
     def render(self, screen):
-        self.blockGroup.draw(screen)
+        self.block_group.draw(screen)
 
     def next_level(self, screen):
         self.current_level += 1
-        self.blockGroup.clear(screen, screen)
+        self.block_group.clear(screen, screen)
 
         self.load_level()
 

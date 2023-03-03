@@ -82,13 +82,13 @@ class Game:
 
             for obj in self.players:
                 obj.update(time, self.blocks)
-            self.screen.fill('blue')
+            self.screen.fill(Color(50, 60, 57))
             self.level.render(screen)
             self.players.draw(screen)
 
-            if self.player.rect.x > resolution[0] // 2:
-                self.level.next_level(screen)
-                self.player.start_pos()
+            # if self.player.rect.x > resolution[0] // 2:
+            #     self.level.next_level(screen)
+            #     self.player.start_pos()
 
             pygame.display.flip()
             # for block in self.blocks:
