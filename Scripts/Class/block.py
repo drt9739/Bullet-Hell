@@ -55,7 +55,7 @@ class Target(pygame.sprite.Sprite):
 class Door(pygame.sprite.Sprite):
     def __init__(self, x, y, size):  # Принимает тип клетки, спрайт (открытый файл)
         super().__init__(config.game_group_1)
-        self.status = True
+        self.status = False
         self.closed = open_image(f'door_closed.png', size[0], size[1])
         self.opened = open_image(f'door_opened.png', size[0], size[1])
         self.rect = self.closed.get_rect()
