@@ -72,8 +72,9 @@ class Level:
             obj.kill()
 
         self.player = Player()
+        if self.current_level != 6:
+            self.load_level()
 
-        self.load_level()
 
     def event_handler(self, time, callback):
         for bullet in config.bullets_group:
@@ -83,7 +84,7 @@ class Level:
         if config.door:
             if config.door.status and self.player.rect.colliderect(config.door.rect):
                 self.next_level()
-            if self.current_level == 3:
+            if self.current_level == 6:
                 callback()
 
     def draw(self, surface):
