@@ -24,10 +24,17 @@ class Bullet(pygame.sprite.Sprite):
         self.image = Bullet.BULLET_IMAGE
         self.rect = pygame.Rect(x, y, Bullet.BULLET_SIZE, Bullet.BULLET_SIZE)
 
-    def event_handler(self, time: float):
+    def event_handler(self, time: float, targets):
         fly_distance = math.sqrt(
             abs(self.start_x - self.rect.x) + abs(self.start_y - self.rect.y)
         )  # Расстояние от начала полёта до конца полёта
+        print(targets)
+        for target in targets:
+            print(target)
+            if target.rect.colliderect(self.rect):
+                self.kill()
+                target.kill()
+                config.door.open()
         if fly_distance > config.BULLET_FLY_LIMIT or self.coll_count >= 3:
             self.kill()
         else:
@@ -60,7 +67,6 @@ class Bullet(pygame.sprite.Sprite):
             self.rect.y = self.y
     
     def draw(self, surface):
-        print ("Drawing")
         surface.blit(
             self.image,
             self.rect

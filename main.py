@@ -1,13 +1,9 @@
-import os
-import sys
 import pygame
 
 from pygame.locals import *
 import config
 from config import *
-from Scripts.open_image import open_image
 from Scripts.Class.level import Level
-from Scripts.Class.player import Player
 from Scripts.Class.button import Button
 
 pygame.init()
@@ -24,7 +20,6 @@ class Game:
         self.block_size = 60, 60
         self.closed_death_screen = False
         self.level = Level(resolution, self.block_size)
-        self.player = Player()
 
         self.font = get_font_for_size(100)
 
@@ -42,14 +37,10 @@ class Game:
                     config.is_running = False
                     break
 
-            self.level.event_handler(clock.tick(TPS))
+            self.level.event_handler(clock.tick(TPS), self.show_death_screen)
 
             self.level.draw(self.surface)
             self.render_status_game()
-
-            if self.player.rect.x > resolution[0] // 2:
-                self.level.next_level(game)
-                self.player.reset()
 
             pygame.display.flip()
 
@@ -68,8 +59,6 @@ class Game:
 
         for obj in config.gui_group_1:
             obj.kill()
-
-        self.player.kill()
 
         self.is_running = False
         if not self.closed_death_screen:
@@ -175,7 +164,7 @@ class Menu:
 
         # Redraw text
         self.surface.fill(BACKGROUND_COLOR)
-        text = self.title_font.render("SquareGame", FONT_ANTIALIAS, WHITE)
+        text = self.title_font.render("Bullet Hell", FONT_ANTIALIAS, WHITE)
         self.surface.blit(
             text, ((self.surface.get_width() - text.get_width()) // 2, 120)
         )

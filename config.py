@@ -48,6 +48,8 @@ game_group_2 = pygame.sprite.Group()
 game_group_3 = pygame.sprite.Group()
 game_group_4 = pygame.sprite.Group()  # Highest
 
+door = None
+
 gui_group_1 = pygame.sprite.Group()  # Lowest
 gui_group_2 = pygame.sprite.Group()
 gui_group_3 = pygame.sprite.Group()  # Highest
